@@ -1,0 +1,21 @@
+# Core stack
+pandas
+numpy
+psycopg2-binary
+
+nats-py
+
+torch
+torchvision
+scikit-learn
+
+apache-airflow
+apache-airflow-providers-postgres
+
+matplotlib
+seaborn
+plotly
+
+python-dotenv
+loguru
+
