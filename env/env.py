@@ -18,7 +18,7 @@ class GetEnv():
             logging.warning(f"env[{key}] not found, using fallback value: {fallback}")
             return fallback
         
-        logging.info(f"key[{key}]: {val}")
+        logging.info(f" key[{key}]: {val}")
         return val
 
 
@@ -30,7 +30,9 @@ class GetEnv():
             return fallback
 
         try:
-            return int(val)
+            int_val = int(val)
+            logging.info(f" key[{key}]: {val}")
+            return int_val
         except ValueError:
             logging.warning(f"env[{key}] invalid value, has to be int, using fallback value: {fallback}")
             return fallback
@@ -44,9 +46,11 @@ class GetEnv():
             return fallback
         
         if val.lower() in ("yes", "1", "true"):
+            logging.info(f" key[{key}]: {val}")
             return True
 
         if val.lower() in ("no", "0", "false"):
+            logging.info(f" key[{key}]: {val}")
             return False
         
         logging.warning(f"env[{key}] invalid value, has to be bool, using fallback value: {fallback}")
