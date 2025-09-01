@@ -209,3 +209,4 @@ __marimo__/
 etl/extract/data.json
 main.py
 experimatals/*
+data/raw/BTC/*
