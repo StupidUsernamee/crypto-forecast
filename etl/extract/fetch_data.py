@@ -1,16 +1,29 @@
 import requests
 import json
 from typing import Any
+from env.env import GetEnv
 
+class _Fetcher:
+    
+    def __init__(self):
+        getEnv = GetEnv()
+        self._url = getEnv.get_str("API_URL", "")
+        self._params = {
+            "key": getEnv.get_str("API_KEY", ""),
+            "pref": getEnv.get_str("API_PREF", ""),
+            "symbol": getEnv.get_str("API_SYMBOL", "")
+        }
+    
+    def _fetch_data(self) -> tuple[dict[str, Any], int]:
+        try:
+            resp = requests.get(url=self._url, params=self._params)
 
-def read_api(url: str, params: dict) -> tuple[dict[str, Any], int]:
-    try: 
-        resp = requests.get(url=url, params=params)
+            if resp.status_code == 429:
+                return (dict(), 429)
 
-        data = resp.json()
-
-        return (data, resp.status_code)
-
-    except json.JSONDecodeError as e:
-        print(f"Cannot decode, err: {e}")
-        return (dict(), 403)
+            data = resp.json()
+            return (data, resp.status_code)
+        
+        except json.JSONDecodeError as e:
+            print(f"Cannot decode, err: {e}")
+            return (dict(), 403)
