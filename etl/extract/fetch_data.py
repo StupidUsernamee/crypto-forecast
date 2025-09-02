@@ -2,6 +2,9 @@ import requests
 import json
 from typing import Any
 from env.env import GetEnv
+from utility.logger_config import Logger
+
+logger = Logger.get_logger(name="FETCH_DATA")
 
 class _Fetcher:
     
@@ -25,5 +28,5 @@ class _Fetcher:
             return (data, resp.status_code)
         
         except json.JSONDecodeError as e:
-            print(f"Cannot decode, err: {e}")
+            logger.error(f"Cannot decode, err: {e}")
             return (dict(), 403)
