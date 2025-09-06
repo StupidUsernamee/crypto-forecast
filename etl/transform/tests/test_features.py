@@ -21,5 +21,11 @@ class Test_features(unittest.TestCase):
         print(file)
 
 
+    def test_featrure_engineer(self):
+        records = self._getFeatures._feature_engineer()
+
+        print(records[0])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
