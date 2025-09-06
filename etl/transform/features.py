@@ -1,4 +1,3 @@
-import os
 import json
 import pathlib
 from datetime import datetime as dt
@@ -18,7 +17,7 @@ class _GetFeatures:
 
     def __init__(self):
         self._getEnv = GetEnv()
-        self._logger = Logger()
+        self._logger = Logger.get_logger("GET_FEATURES")
 
     def _list_data_files(self) -> list[pathlib.Path]:
         data_path = self._getEnv.get_str("DATA_LAKE_PATH", "") # TODO: fill the fallback value
@@ -38,14 +37,39 @@ class _GetFeatures:
 
 
     def _feature_engineer(self):
+        """
+            This function opens the files provided from above methods,
+            And extracts the features that are useful.
+        """
         records = []
         files_list = self._list_data_files()
         file_to_read = self._select_current_file(files_list)
-        with open(file_to_read, 'r') as file:
-            pass
+        file = open(file_to_read, 'r')
 
+        for line in file:
+            try:
+                raw_data = json.loads(line.strip())
 
+            except json.JSONDecodeError as e:
+                self._logger.error(f"json encode error: {e}")
+                continue
 
-if __name__ == "__main__":
-    a = _GetFeatures()
-    a._list_data_files()
+            filtered_data = {
+                "name": raw_data.get("name"),
+                "symbol": raw_data.get("symbol"),
+                "price":raw_data.get("price"),
+                "market_cap":raw_data.get("market_cap"),
+                "total_volume_24h":raw_data.get("total_volume_24h"),
+                "low_24h":raw_data.get("low_24h"),
+                "delta_1h": raw_data.get("delta_1h"),
+                "delta_24h": raw_data.get("delta_24h"),
+                "delta_1h": raw_data.get("delta_1h"),
+                "delta_7d": raw_data.get("delta_7d"),
+                "delta_30d": raw_data.get("delta_30d"),
+                "last_updated_timestamp": raw_data.get("last_updated_timestamp")
+            } 
+            records.append(filtered_data) 
+
+        file.close()
+
+        return records
