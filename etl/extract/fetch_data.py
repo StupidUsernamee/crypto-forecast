@@ -4,12 +4,11 @@ from typing import Any
 from env.env import GetEnv
 from utility.logger_config import Logger
 
-logger = Logger.get_logger(name="FETCH_DATA")
 
 class _Fetcher:
-    
     def __init__(self):
         getEnv = GetEnv()
+        self._logger = Logger.get_logger(name="FETCH_DATA")
         self._url = getEnv.get_str("API_URL", "")
         self._params = {
             "key": getEnv.get_str("API_KEY", ""),
@@ -28,5 +27,5 @@ class _Fetcher:
             return (data, resp.status_code)
         
         except json.JSONDecodeError as e:
-            logger.error(f"Cannot decode, err: {e}")
+            self._logger.error(f"Cannot decode, err: {e}")
             return (dict(), 403)
