@@ -3,7 +3,6 @@ from .load_to_lake import _Saver
 
 from utility.logger_config import Logger
 
-logger = Logger.get_logger()
 
 class Extract:
     # TODO: err hgandling
@@ -11,7 +10,9 @@ class Extract:
         self._fetcher = _Fetcher()
         self._saver = _Saver()
 
+        self._logger = Logger.get_logger("etl: EXTRACT")
+
     def run(self):
         data, _ = self._fetcher._fetch_data()
         self._saver._append_record(data)
-        logger.info("data added to data lake")
+        self._logger.info("data added to data lake")
